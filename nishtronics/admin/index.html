@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Admin CMS — Nishtronics Soundlabs</title>
+<link rel="stylesheet" href="../css/style.css"/>
+<style>
+body { background: var(--ink); overflow-x: hidden; }
+.adm-login { display:flex; align-items:center; justify-content:center; min-height:100vh; padding:2rem; }
+.login-card { background:var(--ink-1); border:1px solid var(--line); border-radius:var(--rl); padding:2.5rem; width:100%; max-width:380px; position:relative; overflow:hidden; }
+.login-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,var(--gold),transparent); }
+.login-logo { font-family:var(--fh); font-size:1.5rem; font-weight:900; letter-spacing:3px; text-align:center; margin-bottom:.5rem; text-transform:uppercase; }
+.login-logo span { color:var(--gold); }
+.login-sub { font-size:.65rem; text-transform:uppercase; letter-spacing:3px; color:var(--t3); text-align:center; margin-bottom:2rem; }
+.adm-layout { display:flex; min-height:100vh; }
+.adm-panel { display:none; }
+/* Overrides for admin price input */
+input[type=number].pcell::-webkit-inner-spin-button { -webkit-appearance:auto; }
+.btn-icon-sm { width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:var(--rs); font-size:.8rem; cursor:pointer; transition:all var(--tr); border:1px solid var(--line); background:var(--ink-3); color:var(--t2); }
+.btn-icon-sm:hover { background:var(--ink-4); color:var(--t1); border-color:var(--line-hi); }
+.btn-icon-sm.del:hover { background:rgba(239,68,68,.15); color:var(--red); border-color:rgba(239,68,68,.4); }
+.adm-table-actions { display:flex; gap:.35rem; align-items:center; }
+.quick-actions { display:flex; flex-wrap:wrap; gap:.75rem; }
+.seed-btn-wrap { margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid var(--line); }
+</style>
+<meta name="robots" content="noindex,nofollow">
+</head>
+<body>
+
+<!-- ══ LOGIN ══ -->
+<div class="adm-login" id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">NISHTRONICS <span>ADMIN</span></div>
+    <div class="login-sub">CMS Dashboard</div>
+    <div class="fg">
+      <label class="flabel">Email</label>
+      <input type="email" class="finput" id="loginEmail" placeholder="admin email" autocomplete="username"/>
+    </div>
+    <div class="fg">
+      <label class="flabel">Password</label>
+      <input type="password" class="finput" id="loginPass" placeholder="Enter admin password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <button onclick="doLogin()" class="btn btn-gold btn-full" style="margin-top:.5rem;">Login</button>
+    <div id="loginErr" style="display:none;margin-top:.75rem;padding:.625rem 1rem;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:var(--rs);font-size:.8rem;color:var(--red);text-align:center;">Incorrect email or password</div>
+  </div>
+</div>
+
+<!-- ══ ADMIN PANEL ══ -->
+<div class="adm-panel" id="adminPanel">
+  <div class="adm-layout">
+
+    <!-- SIDEBAR -->
+    <div class="adm-side" id="adSide">
+      <div class="adm-logo">
+        <h2>NISHTRONICS</h2>
+        <small>Admin Panel</small>
+      </div>
+      <nav class="adm-nav">
+        <a class="active" onclick="showSec('dashboard')"><span>📊</span> Dashboard</a>
+        <a onclick="showSec('products')"><span>📦</span> Products</a>
+        <a onclick="showSec('orders')"><span>🛒</span> Orders</a>
+        <a onclick="showSec('bookings')"><span>📅</span> Bookings</a>
+        <a onclick="showSec('settings')"><span>⚙️</span> Settings</a>
+        <a onclick="doLogout()" style="margin-top:auto;border-top:1px solid var(--line);"><span>🚪</span> Logout</a>
+      </nav>
+      <div style="padding:1rem 1.25rem;">
+        <a href="../index.html" class="btn btn-ghost btn-sm btn-full" target="_blank">View Site →</a>
+      </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="adm-main">
+
+      <!-- ── DASHBOARD ── -->
+      <div class="adm-sec active" id="sec-dashboard">
+        <div class="adm-topbar">
+          <div>
+            <h1 style="font-size:2rem;">Dashboard</h1>
+            <p style="color:var(--t2);font-size:.82rem;margin-top:.25rem;">Welcome back, Nishtronics Admin</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:1rem;">
+            <div class="fb-badge"><span class="fb-dot" id="fbDot"></span><span class="fb-label" id="fbLabel">Checking…</span></div>
+            <div id="adClock" style="font-family:var(--fm);font-size:1.2rem;color:var(--gold);"></div>
+            <button class="theme-toggle" id="themeToggleAdmin" aria-label="Toggle light/dark theme" title="Light/Dark theme">☀️</button>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-tile"><div class="stat-tile-num" id="dProd">—</div><div class="stat-tile-lbl">Products</div></div>
+          <div class="stat-tile"><div class="stat-tile-num" id="dStock">—</div><div class="stat-tile-lbl">In Stock</div></div>
+          <div class="stat-tile"><div class="stat-tile-num" id="dOrders">—</div><div class="stat-tile-lbl">Orders Logged</div></div>
+          <div class="stat-tile"><div class="stat-tile-num" id="dBrands">—</div><div class="stat-tile-lbl">Brands</div></div>
+        </div>
+
+        <div class="adm-card" style="padding:1.5rem;">
+          <h3 style="font-size:.9rem;margin-bottom:1.25rem;letter-spacing:.5px;">Quick Actions</h3>
+          <div class="quick-actions">
+            <button onclick="showSec('products');openAddProduct()" class="btn btn-gold btn-sm">+ Add Product</button>
+            <button onclick="showSec('orders');openAddOrder()" class="btn btn-outline btn-sm">+ Log Order</button>
+            <button onclick="showSec('bookings');openAddBooking()" class="btn btn-outline btn-sm">+ Add Booking</button>
+            <a href="../products.html" class="btn btn-ghost btn-sm" target="_blank">View Shop ↗</a>
+          </div>
+          <div class="seed-btn-wrap">
+            <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--t3);margin-bottom:.5rem;">Firebase Setup</div>
+            <button onclick="seedFirebase()" class="btn btn-ghost btn-sm" id="seedBtn">Seed Firestore from products.json</button>
+            <p style="font-size:.68rem;color:var(--t3);margin-top:.4rem;line-height:1.5;">Only run this once when first setting up Firebase. Uploads all products from <code>data/products.json</code> to Firestore.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PRODUCTS ── -->
+      <div class="adm-sec" id="sec-products">
+        <div class="adm-topbar">
+          <div><h1 style="font-size:2rem;">Products</h1><p style="color:var(--t2);font-size:.82rem;margin-top:.25rem;" id="productCountLabel">Loading…</p></div>
+          <button onclick="openAddProduct()" class="btn btn-gold btn-sm">+ Add Product</button>
+        </div>
+        <div class="adm-card">
+          <div class="adm-card-head">
+            <h3 style="font-size:.88rem;">All Products</h3>
+            <input type="text" class="tsearch" id="pSearch" placeholder="Search products…" oninput="filterProductTable()"/>
+          </div>
+          <div class="atw">
+            <table class="atable" id="productTable">
+              <thead><tr>
+                <th style="width:52px;"></th>
+                <th>Name</th><th>Brand</th><th>Category</th>
+                <th>Price (KSh)</th><th>Stock</th><th>Badge</th><th>Actions</th>
+              </tr></thead>
+              <tbody id="productTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ORDERS ── -->
+      <div class="adm-sec" id="sec-orders">
+        <div class="adm-topbar">
+          <div><h1 style="font-size:2rem;">Orders</h1><p style="color:var(--t2);font-size:.82rem;margin-top:.25rem;" id="orderCountLabel">0 orders</p></div>
+          <div style="display:flex;gap:.5rem;">
+            <button onclick="openAddOrder()" class="btn btn-gold btn-sm">+ Log Order</button>
+            <button onclick="clearOrders()" class="btn btn-ghost btn-sm">Clear All</button>
+          </div>
+        </div>
+        <div class="adm-card">
+          <div class="adm-card-head"><h3 style="font-size:.88rem;">Order History</h3></div>
+          <div id="ordersEmpty" style="padding:3rem;text-align:center;color:var(--t3);">
+            <div style="font-size:3rem;margin-bottom:1rem;opacity:.2;">📋</div>
+            <p>No orders logged yet. When customers send WhatsApp orders, log them here.</p>
+          </div>
+          <div class="atw" id="ordersTableWrap" style="display:none;">
+            <table class="atable">
+              <thead><tr><th>#</th><th>Customer</th><th>Phone</th><th>Items</th><th>Total</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="orderTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── BOOKINGS ── -->
+      <div class="adm-sec" id="sec-bookings">
+        <div class="adm-topbar">
+          <div><h1 style="font-size:2rem;">Bookings</h1><p style="color:var(--t2);font-size:.82rem;margin-top:.25rem;" id="bookingCountLabel">0 bookings</p></div>
+          <button onclick="openAddBooking()" class="btn btn-gold btn-sm">+ Add Booking</button>
+        </div>
+        <div class="adm-card">
+          <div class="adm-card-head"><h3 style="font-size:.88rem;">All Bookings</h3></div>
+          <div id="bookingsEmpty" style="padding:3rem;text-align:center;color:var(--t3);">
+            <div style="font-size:3rem;margin-bottom:1rem;opacity:.2;">📅</div>
+            <p>No bookings yet. Incoming WhatsApp booking requests can be logged here.</p>
+          </div>
+          <div class="atw" id="bookingsTableWrap" style="display:none;">
+            <table class="atable">
+              <thead><tr><th>#</th><th>Name</th><th>Phone</th><th>Service</th><th>Date / Time</th><th>Vehicle</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="bookingTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SETTINGS ── -->
+      <div class="adm-sec" id="sec-settings">
+        <div class="adm-topbar"><h1 style="font-size:2rem;">Settings</h1></div>
+        <div class="adm-card" style="padding:1.5rem;max-width:560px;">
+          <h3 style="font-size:.88rem;margin-bottom:1.5rem;border-bottom:1px solid var(--line);padding-bottom:1rem;">Account</h3>
+          <div class="fg"><label class="flabel">Signed in as</label><div id="setEmail" style="font-size:.85rem;color:var(--t2);">—</div></div>
+          <div class="fg"><label class="flabel">New Admin Password (min 8 characters)</label><input class="finput" type="password" id="setPass" autocomplete="new-password" placeholder="Enter a new password"/></div>
+          <button onclick="saveSettings()" class="btn btn-gold" style="margin-top:.5rem;">Change Password</button>
+          <p style="font-size:.68rem;color:var(--t3);margin-top:.75rem;line-height:1.5;">Shop name, WhatsApp number and social links are set in the site files with <code>tools/set-contact.py</code>, not here.</p>
+
+          <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--line);">
+            <h3 style="font-size:.88rem;margin-bottom:1rem;">Firebase Status</h3>
+            <div class="fb-badge" style="font-size:.78rem;"><span class="fb-dot"></span><span class="fb-label">—</span></div>
+            <p style="font-size:.75rem;color:var(--t3);margin-top:.75rem;line-height:1.6;">
+              To connect Firebase: edit <code>js/firebase.js</code> and replace the config object with your credentials from the Firebase Console. Then click "Seed Firestore" on the Dashboard to upload products.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /adm-main -->
+  </div><!-- /adm-layout -->
+</div><!-- /adminPanel -->
+
+<!-- ══ ADD/EDIT PRODUCT MODAL ══ -->
+<div class="modal-bg" id="productModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="productModalTitle">Add Product</h3>
+      <button onclick="closeModal('productModal')" class="icon-btn" style="width:32px;height:32px;">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editId"/>
+      <div class="frow c2">
+        <div class="fg"><label class="flabel">Name <span class="req">*</span></label><input class="finput" type="text" id="pName" placeholder="e.g. Kenwood KFC-W3016 12\" Sub"/></div>
+        <div class="fg"><label class="flabel">Brand <span class="req">*</span></label>
+          <input class="finput" type="text" id="pBrand" placeholder="e.g. Kenwood" list="brandList"/>
+          <datalist id="brandList">
+            <option value="Kenwood"/><option value="Pioneer"/><option value="Nakamichi"/>
+            <option value="Sundown Audio"/><option value="Kicker"/><option value="Rockford Fosgate"/>
+            <option value="Taramps"/><option value="Nishtronics"/><option value="Concox"/><option value="Teltonika"/>
+          </datalist>
+        </div>
+      </div>
+      <div class="frow c2">
+        <div class="fg"><label class="flabel">Category <span class="req">*</span></label>
+          <select class="fselect" id="pCategory">
+            <option value="speakers">Speakers</option><option value="subwoofers">Subwoofers</option>
+            <option value="headunits">Head Units</option><option value="amplifiers">Amplifiers</option>
+            <option value="accessories">Accessories</option><option value="trackers">Trackers</option>
+            <option value="secondhand">2nd Hand</option>
+          </select>
+        </div>
+        <div class="fg"><label class="flabel">Price (KSh) <span class="req">*</span></label><input class="finput" type="number" id="pPrice" placeholder="e.g. 12500" min="0"/></div>
+      </div>
+      <div class="fg"><label class="flabel">Description <span class="req">*</span></label><textarea class="ftextarea" id="pDesc" style="min-height:80px;" placeholder="Short product description…"></textarea></div>
+      <div class="frow c2">
+        <div class="fg"><label class="flabel">Badge</label>
+          <select class="fselect" id="pBadge">
+            <option value="">None</option><option value="bestseller">Bestseller</option>
+            <option value="new">New</option><option value="popular">Popular</option>
+            <option value="high-end">High End</option><option value="2nd-hand">2nd Hand</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+        <div class="fg"><label class="flabel">Stock Status</label>
+          <select class="fselect" id="pStock">
+            <option value="true">In Stock</option><option value="false">Out of Stock</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg"><label class="flabel">Image path or URL (optional)</label><input class="finput" type="text" id="pImage" placeholder="images/products/your-product-id.webp"/></div>
+    </div>
+    <div class="modal-foot">
+      <button onclick="closeModal('productModal')" class="btn btn-ghost btn-sm">Cancel</button>
+      <button onclick="saveProduct()" class="btn btn-gold btn-sm">Save Product</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADD ORDER MODAL ══ -->
+<div class="modal-bg" id="orderModal">
+  <div class="modal">
+    <div class="modal-head"><h3>Log Order</h3><button onclick="closeModal('orderModal')" class="icon-btn" style="width:32px;height:32px;">✕</button></div>
+    <div class="modal-body">
+      <div class="frow c2">
+        <div class="fg"><label class="flabel">Customer Name <span class="req">*</span></label><input class="finput" type="text" id="oName" placeholder="Customer name"/></div>
+        <div class="fg"><label class="flabel">Phone <span class="req">*</span></label><input class="finput" type="tel" id="oPhone" placeholder="07XX XXX XXX"/></div>
+      </div>
+      <div class="fg"><label class="flabel">Items / Description <span class="req">*</span></label><textarea class="ftextarea" id="oItems" style="min-height:72px;" placeholder="e.g. Kenwood 12&quot; Sub x1, 4 AWG Wiring Kit x1"></textarea></div>
+      <div class="frow c2">
+        <div class="fg"><label class="flabel">Total (KSh)</label><input class="finput" type="number" id="oTotal" placeholder="e.g. 16300"/></div>
+        <div class="fg"><label class="flabel">Status</label>
+          <select class="fselect" id="oStatus">
+            <option value="new">New</option><option value="confirmed">Confirmed</option>
+            <option value="completed">Completed</option><option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button onclick="closeModal('orderModal')" class="btn btn-ghost btn-sm">Cancel</button>
+      <button onclick="saveOrder()" class="btn btn-gold btn-sm">Save Order</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADD BOOKING MODAL ══ -->
+<div class="modal-bg" id="bookingModal">
+  <div class="modal">
+    <div class="modal-head"><h3>Log Booking</h3><button onclick="closeModal('bookingModal')" class="icon-btn" style="width:32px;height:32px;">✕</button></div>
+    <div class="modal-body">
+      <div class="frow c2">
+        <div class="fg"><label class="flabel">Customer Name <span class="req">*</span></label><input class="finput" type="text" id="bName" placeholder="Customer name"/></div>
+        <div class="fg"><label class="flabel">Phone <span class="req">*</span></label><input class="finput" type="tel" id="bPhone" placeholder="07XX XXX XXX"/></div>
+      </div>
+      <div class="fg"><label class="flabel">Service(s) <span class="req">*</span></label><input class="finput" type="text" id="bService" placeholder="e.g. Car Audio Installation, Sound Tuning"/></div>
+      <div class="frow c2">
+        <div class="fg"><label class="flabel">Date</label><input class="finput" type="date" id="bDate"/></div>
+        <div class="fg"><label class="flabel">Time Slot</label><input class="finput" type="text" id="bTime" placeholder="e.g. 10am – 12pm"/></div>
+      </div>
+      <div class="frow c2">
+        <div class="fg"><label class="flabel">Vehicle</label><input class="finput" type="text" id="bVehicle" placeholder="e.g. Toyota Fielder 2016"/></div>
+        <div class="fg"><label class="flabel">Status</label>
+          <select class="fselect" id="bStatus">
+            <option value="new">Pending</option><option value="confirmed">Confirmed</option>
+            <option value="completed">Completed</option><option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button onclick="closeModal('bookingModal')" class="btn btn-ghost btn-sm">Cancel</button>
+      <button onclick="saveBooking()" class="btn btn-gold btn-sm">Save Booking</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/firebase.js"></script>
+<script>
+// ═══════════════════════════════════════
+// ADMIN STATE
+// ═══════════════════════════════════════
+let PRODUCTS = [];
+let ORDERS   = JSON.parse(localStorage.getItem('nish_orders') || '[]');
+let BOOKINGS = JSON.parse(localStorage.getItem('nish_bookings') || '[]');
+
+// Show a site-relative image path (images/products/x.webp) correctly from /admin/
+function adminImg(src) {
+  if (!src) return '../images/placeholder.svg';
+  return /^(https?:)?\/\/|^\//.test(src) ? src : '../' + src;
+}
+
+// Clock
+setInterval(() => {
+  const el = document.getElementById('adClock');
+  if (el) el.textContent = new Date().toLocaleTimeString('en-KE', { hour:'2-digit', minute:'2-digit' });
+}, 1000);
+
+// Theme toggling (Admin)
+const ADMIN_THEME_KEY = 'nishtronics_theme';
+function applyAdminTheme(theme) {
+  const isLight = theme === 'light';
+  document.body.classList.toggle('theme-light', isLight);
+  const toggle = document.getElementById('themeToggleAdmin');
+  if (toggle) {
+    toggle.textContent = isLight ? '🌙' : '☀️';
+    toggle.setAttribute('aria-label', isLight ? 'Switch to dark theme' : 'Switch to light theme');
+  }
+  localStorage.setItem(ADMIN_THEME_KEY, theme);
+}
+
+function initAdminTheme() {
+  const storedTheme = localStorage.getItem(ADMIN_THEME_KEY) || 'dark';
+  applyAdminTheme(storedTheme);
+  document.getElementById('themeToggleAdmin')?.addEventListener('click', () => {
+    const active = document.body.classList.contains('theme-light') ? 'dark' : 'light';
+    applyAdminTheme(active);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initAdminTheme);
+
+// ═══════════════════════════════════════
+// LOGIN / LOGOUT
+// ═══════════════════════════════════════
+function showLoginError(msg) {
+  const err = document.getElementById('loginErr');
+  err.textContent = msg;
+  err.style.display = 'block';
+  setTimeout(() => err.style.display = 'none', 4000);
+}
+
+let ADMIN_ENTERED = false;
+async function enterAdmin(user) {
+  if (ADMIN_ENTERED) return;
+  ADMIN_ENTERED = true;
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('adminPanel').style.display  = 'block';
+  const em = document.getElementById('setEmail');
+  if (em) em.textContent = user?.email || '—';
+  await loadProducts();
+  loadOrders();
+  loadBookings();
+  updateDashboard();
+}
+
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass  = document.getElementById('loginPass').value;
+  if (!email || !pass) { showLoginError('Enter your email and password'); return; }
+  await window.firebaseReady;
+  if (!FIREBASE_READY) { showLoginError('Firebase is not configured. Admin needs it to sign in.'); return; }
+  try {
+    const cred = await fsAdminLogin(email, pass);
+    await enterAdmin(cred.user);
+  } catch (e) {
+    const tooMany = e && e.code === 'auth/too-many-requests';
+    showLoginError(tooMany ? 'Too many attempts. Wait a few minutes and try again.' : 'Incorrect email or password');
+  }
+}
+
+async function doLogout() {
+  try { await fsAdminLogout(); } catch (e) {}
+  ADMIN_ENTERED = false;
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('adminPanel').style.display  = 'none';
+  document.getElementById('loginPass').value = '';
+}
+
+// Restore an existing session after a page refresh
+window.firebaseReady.then(() => fsOnAuth(user => { if (user) enterAdmin(user); }));
+
+// ═══════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════
+function showSec(id) {
+  document.querySelectorAll('.adm-sec').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.adm-nav a').forEach(a => a.classList.remove('active'));
+  document.getElementById('sec-' + id)?.classList.add('active');
+  const map = { dashboard:0, products:1, orders:2, bookings:3, settings:4 };
+  document.querySelectorAll('.adm-nav a')[map[id] ?? 0]?.classList.add('active');
+  if (id === 'products') renderProductTable();
+  if (id === 'orders')   renderOrdersTable();
+  if (id === 'bookings') renderBookingsTable();
+  if (id === 'dashboard') updateDashboard();
+}
+
+// ═══════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════
+function updateDashboard() {
+  document.getElementById('dProd').textContent   = PRODUCTS.length;
+  document.getElementById('dStock').textContent  = PRODUCTS.filter(p => p.inStock !== false).length;
+  document.getElementById('dOrders').textContent = ORDERS.length;
+  document.getElementById('dBrands').textContent = new Set(PRODUCTS.map(p => p.brand)).size;
+}
+
+// ═══════════════════════════════════════
+// PRODUCTS
+// ═══════════════════════════════════════
+async function loadProducts() {
+  // Try Firebase first
+  const fbProds = await fsGetProducts();
+  if (fbProds) {
+    PRODUCTS = fbProds;
+  } else {
+    // Fallback to local JSON (go up one level from admin/)
+    try {
+      const r = await fetch('../data/products.json');
+      PRODUCTS = await r.json();
+    } catch { PRODUCTS = []; }
+  }
+  window.PRODUCTS = PRODUCTS;
+  document.getElementById('productCountLabel').textContent = `${PRODUCTS.length} products`;
+  renderProductTable();
+  updateDashboard();
+}
+
+function renderProductTable(data) {
+  const list  = data || PRODUCTS;
+  const tbody = document.getElementById('productTbody');
+  document.getElementById('productCountLabel').textContent = `${list.length} of ${PRODUCTS.length} products`;
+  if (!list.length) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--t3);">No products found</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = list.map((p, i) => `
+    <tr>
+      <td><img src="${adminImg(p.image)}" class="a-thumb" onerror="this.onerror=null;this.src='../images/placeholder.svg'" alt=""/></td>
+      <td style="font-weight:600;max-width:200px;font-size:.8rem;">${p.name}</td>
+      <td style="color:var(--gold);font-size:.78rem;">${p.brand}</td>
+      <td style="font-size:.75rem;text-transform:capitalize;">${p.category}</td>
+      <td><input class="pcell" type="number" value="${p.price}" onchange="updatePrice('${p.id}',this.value)" style="width:90px;"/></td>
+      <td>
+        <button class="sdot ${p.inStock !== false ? 'in' : 'out'}" onclick="toggleStock('${p.id}')">
+          ${p.inStock !== false ? '● In Stock' : '● Out'}
+        </button>
+      </td>
+      <td style="font-size:.75rem;">${p.badge || '—'}</td>
+      <td>
+        <div class="adm-table-actions">
+          <button class="btn-icon-sm" onclick="editProduct('${p.id}')" title="Edit">✎</button>
+          <button class="btn-icon-sm del" onclick="deleteProduct('${p.id}')" title="Delete">✕</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function filterProductTable() {
+  const q = document.getElementById('pSearch')?.value.toLowerCase().trim() || '';
+  const f = PRODUCTS.filter(p =>
+    p.name.toLowerCase().includes(q) ||
+    p.brand.toLowerCase().includes(q) ||
+    p.category.toLowerCase().includes(q)
+  );
+  renderProductTable(f);
+}
+
+function toggleStock(id) {
+  const p = PRODUCTS.find(p => p.id === id);
+  if (!p) return;
+  p.inStock = !p.inStock;
+  if (FIREBASE_READY) fsUpdateProduct(id, { inStock: p.inStock });
+  renderProductTable();
+  updateDashboard();
+  aToast(`${p.name.slice(0,28)}: ${p.inStock ? 'In Stock ✓' : 'Out of Stock'}`);
+}
+
+function updatePrice(id, val) {
+  const p = PRODUCTS.find(p => p.id === id);
+  if (!p) return;
+  const price = parseInt(val);
+  if (isNaN(price) || price < 0) return;
+  p.price = price;
+  if (FIREBASE_READY) fsUpdateProduct(id, { price });
+}
+
+function openAddProduct() {
+  document.getElementById('productModalTitle').textContent = 'Add Product';
+  document.getElementById('editId').value = '';
+  ['pName','pBrand','pDesc','pImage','pPrice'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  document.getElementById('pCategory').value = 'speakers';
+  document.getElementById('pBadge').value    = '';
+  document.getElementById('pStock').value    = 'true';
+  document.getElementById('productModal').classList.add('open');
+}
+
+function editProduct(id) {
+  const p = PRODUCTS.find(p => p.id === id);
+  if (!p) return;
+  document.getElementById('productModalTitle').textContent = 'Edit Product';
+  document.getElementById('editId').value    = id;
+  document.getElementById('pName').value     = p.name;
+  document.getElementById('pBrand').value    = p.brand;
+  document.getElementById('pCategory').value = p.category;
+  document.getElementById('pPrice').value    = p.price;
+  document.getElementById('pDesc').value     = p.description || '';
+  document.getElementById('pBadge').value    = p.badge || '';
+  document.getElementById('pStock').value    = p.inStock !== false ? 'true' : 'false';
+  document.getElementById('pImage').value    = p.image || '';
+  document.getElementById('productModal').classList.add('open');
+}
+
+async function saveProduct() {
+  const name  = document.getElementById('pName').value.trim();
+  const brand = document.getElementById('pBrand').value.trim();
+  const price = parseInt(document.getElementById('pPrice').value);
+  const desc  = document.getElementById('pDesc').value.trim();
+  if (!name || !brand || !price || !desc) { aToast('Please fill all required fields', true); return; }
+
+  const editId = document.getElementById('editId').value;
+  const data = {
+    id:          editId || `custom-${Date.now()}`,
+    name, brand,
+    category:    document.getElementById('pCategory').value,
+    subcategory: '',
+    price,
+    description: desc,
+    specs:       {},
+    image:       document.getElementById('pImage').value.trim(),
+    badge:       document.getElementById('pBadge').value || null,
+    inStock:     document.getElementById('pStock').value === 'true'
+  };
+
+  if (editId) {
+    const idx = PRODUCTS.findIndex(p => p.id === editId);
+    if (idx > -1) PRODUCTS[idx] = data;
+    if (FIREBASE_READY) await fsUpdateProduct(editId, data);
+  } else {
+    PRODUCTS.unshift(data);
+    if (FIREBASE_READY) await fsAddProduct(data);
+  }
+
+  closeModal('productModal');
+  renderProductTable();
+  updateDashboard();
+  aToast(editId ? 'Product updated ✓' : 'Product added ✓');
+}
+
+async function deleteProduct(id) {
+  const p = PRODUCTS.find(p => p.id === id);
+  if (!p || !confirm(`Delete "${p.name}"?`)) return;
+  PRODUCTS = PRODUCTS.filter(p => p.id !== id);
+  if (FIREBASE_READY) await fsDeleteProduct(id);
+  renderProductTable();
+  updateDashboard();
+  aToast('Product deleted');
+}
+
+// ═══════════════════════════════════════
+// ORDERS
+// ═══════════════════════════════════════
+function loadOrders() {
+  // Try Firebase
+  fsGetOrders().then(data => {
+    if (data) { ORDERS = data; localStorage.setItem('nish_orders', JSON.stringify(ORDERS)); }
+    renderOrdersTable();
+  });
+  renderOrdersTable();
+}
+
+function renderOrdersTable() {
+  const lbl  = document.getElementById('orderCountLabel');
+  const empty = document.getElementById('ordersEmpty');
+  const wrap  = document.getElementById('ordersTableWrap');
+  const tbody = document.getElementById('orderTbody');
+  if (lbl) lbl.textContent = `${ORDERS.length} orders`;
+  if (!ORDERS.length) {
+    empty && (empty.style.display = 'block');
+    wrap  && (wrap.style.display  = 'none');
+    return;
+  }
+  empty && (empty.style.display = 'none');
+  wrap  && (wrap.style.display  = 'block');
+  tbody.innerHTML = ORDERS.map((o, i) => `
+    <tr>
+      <td style="color:var(--t3);font-size:.72rem;font-family:var(--fm);">#${String(i+1).padStart(3,'0')}</td>
+      <td style="font-weight:600;">${o.name}</td>
+      <td><a href="tel:${o.phone}" style="color:var(--gold);">${o.phone}</a></td>
+      <td style="font-size:.78rem;max-width:180px;">${o.items}</td>
+      <td style="font-weight:600;font-family:var(--fm);">${o.total ? 'KSh ' + parseInt(o.total).toLocaleString() : '—'}</td>
+      <td style="font-size:.72rem;color:var(--t2);">${o.date || '—'}</td>
+      <td>
+        <select class="s-pill s-${o.status}" onchange="updateOrderStatus(${i},this.value)" style="background:transparent;border:none;cursor:pointer;font-size:.65rem;font-weight:600;text-transform:uppercase;color:inherit;padding:.2rem .4rem;">
+          <option value="new" ${o.status==='new'?'selected':''}>New</option>
+          <option value="confirmed" ${o.status==='confirmed'?'selected':''}>Confirmed</option>
+          <option value="completed" ${o.status==='completed'?'selected':''}>Completed</option>
+          <option value="cancelled" ${o.status==='cancelled'?'selected':''}>Cancelled</option>
+        </select>
+      </td>
+      <td><button class="btn-icon-sm del" onclick="deleteOrder(${i})" title="Delete">✕</button></td>
+    </tr>`).join('');
+}
+
+function openAddOrder() { document.getElementById('orderModal').classList.add('open'); }
+
+async function saveOrder() {
+  const name  = document.getElementById('oName').value.trim();
+  const phone = document.getElementById('oPhone').value.trim();
+  const items = document.getElementById('oItems').value.trim();
+  if (!name || !phone || !items) { aToast('Fill required fields', true); return; }
+  const order = { name, phone, items, total: document.getElementById('oTotal').value, status: document.getElementById('oStatus').value, date: new Date().toLocaleDateString('en-KE'), createdAt: Date.now() };
+  ORDERS.unshift(order);
+  localStorage.setItem('nish_orders', JSON.stringify(ORDERS));
+  await fsAddOrder(order);
+  closeModal('orderModal');
+  renderOrdersTable();
+  updateDashboard();
+  aToast('Order logged ✓');
+  ['oName','oPhone','oItems','oTotal'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+}
+
+function updateOrderStatus(idx, status) {
+  ORDERS[idx].status = status;
+  localStorage.setItem('nish_orders', JSON.stringify(ORDERS));
+  if (FIREBASE_READY && ORDERS[idx].id) fsUpdateOrder(ORDERS[idx].id, { status });
+  renderOrdersTable();
+}
+
+function deleteOrder(idx) {
+  ORDERS.splice(idx, 1);
+  localStorage.setItem('nish_orders', JSON.stringify(ORDERS));
+  renderOrdersTable();
+  updateDashboard();
+}
+
+function clearOrders() {
+  if (!confirm('Clear all order history?')) return;
+  ORDERS = [];
+  localStorage.removeItem('nish_orders');
+  renderOrdersTable();
+  updateDashboard();
+}
+
+// ═══════════════════════════════════════
+// BOOKINGS
+// ═══════════════════════════════════════
+function loadBookings() {
+  fsGetBookings().then(data => {
+    if (data) { BOOKINGS = data; localStorage.setItem('nish_bookings', JSON.stringify(BOOKINGS)); }
+    renderBookingsTable();
+  });
+  renderBookingsTable();
+}
+
+function renderBookingsTable() {
+  const lbl   = document.getElementById('bookingCountLabel');
+  const empty = document.getElementById('bookingsEmpty');
+  const wrap  = document.getElementById('bookingsTableWrap');
+  const tbody = document.getElementById('bookingTbody');
+  if (lbl) lbl.textContent = `${BOOKINGS.length} bookings`;
+  if (!BOOKINGS.length) {
+    empty && (empty.style.display = 'block');
+    wrap  && (wrap.style.display  = 'none');
+    return;
+  }
+  empty && (empty.style.display = 'none');
+  wrap  && (wrap.style.display  = 'block');
+  tbody.innerHTML = BOOKINGS.map((b, i) => `
+    <tr>
+      <td style="color:var(--t3);font-size:.72rem;font-family:var(--fm);">#${String(i+1).padStart(3,'0')}</td>
+      <td style="font-weight:600;">${b.name}</td>
+      <td><a href="tel:${b.phone}" style="color:var(--gold);">${b.phone}</a></td>
+      <td style="font-size:.78rem;">${Array.isArray(b.services) ? b.services.join(', ') : (b.service || '—')}</td>
+      <td style="font-size:.75rem;">${b.date || '—'} ${b.time ? '@ '+b.time : ''}</td>
+      <td style="font-size:.78rem;">${b.vehicle || '—'}</td>
+      <td>
+        <select class="s-pill s-${b.status||'new'}" onchange="updateBookingStatus(${i},this.value)" style="background:transparent;border:none;cursor:pointer;font-size:.65rem;font-weight:600;text-transform:uppercase;color:inherit;padding:.2rem .4rem;">
+          <option value="new" ${(b.status||'new')==='new'?'selected':''}>Pending</option>
+          <option value="confirmed" ${b.status==='confirmed'?'selected':''}>Confirmed</option>
+          <option value="completed" ${b.status==='completed'?'selected':''}>Done</option>
+          <option value="cancelled" ${b.status==='cancelled'?'selected':''}>Cancelled</option>
+        </select>
+      </td>
+      <td><button class="btn-icon-sm del" onclick="deleteBooking(${i})" title="Delete">✕</button></td>
+    </tr>`).join('');
+}
+
+function openAddBooking() { document.getElementById('bookingModal').classList.add('open'); }
+
+async function saveBooking() {
+  const name    = document.getElementById('bName').value.trim();
+  const phone   = document.getElementById('bPhone').value.trim();
+  const service = document.getElementById('bService').value.trim();
+  if (!name || !phone || !service) { aToast('Fill required fields', true); return; }
+  const booking = { name, phone, service, date: document.getElementById('bDate').value, time: document.getElementById('bTime').value, vehicle: document.getElementById('bVehicle').value.trim(), status: document.getElementById('bStatus').value, createdAt: Date.now() };
+  BOOKINGS.unshift(booking);
+  localStorage.setItem('nish_bookings', JSON.stringify(BOOKINGS));
+  await fsAddBooking(booking);
+  closeModal('bookingModal');
+  renderBookingsTable();
+  aToast('Booking saved ✓');
+  ['bName','bPhone','bService','bDate','bTime','bVehicle'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+}
+
+function updateBookingStatus(idx, status) {
+  BOOKINGS[idx].status = status;
+  localStorage.setItem('nish_bookings', JSON.stringify(BOOKINGS));
+}
+
+function deleteBooking(idx) {
+  BOOKINGS.splice(idx, 1);
+  localStorage.setItem('nish_bookings', JSON.stringify(BOOKINGS));
+  renderBookingsTable();
+}
+
+// ═══════════════════════════════════════
+// SETTINGS
+// ═══════════════════════════════════════
+async function saveSettings() {
+  const pass = document.getElementById('setPass').value;
+  if (pass.length < 8) { aToast('Password must be at least 8 characters', true); return; }
+  try {
+    await fsChangePassword(pass);
+    document.getElementById('setPass').value = '';
+    aToast('Password changed ✓');
+  } catch (e) {
+    aToast(e && e.code === 'auth/requires-recent-login' ? 'Log out and back in, then try again' : 'Could not change password', true);
+  }
+}
+
+// ═══════════════════════════════════════
+// FIREBASE SEED
+// ═══════════════════════════════════════
+async function seedFirebase() {
+  if (!FIREBASE_READY) { aToast('Firebase not configured yet', true); return; }
+  const btn = document.getElementById('seedBtn');
+  btn.textContent = 'Seeding…';
+  btn.disabled = true;
+  try {
+    const r = await fetch('../data/products.json');
+    const products = await r.json();
+    const count = await fsSeedProducts(products);
+    aToast(`✓ Seeded ${count} products to Firestore`);
+    await loadProducts();
+  } catch (err) {
+    aToast('Seed failed: ' + err.message, true);
+  } finally {
+    btn.textContent = 'Seed Firestore from products.json';
+    btn.disabled = false;
+  }
+}
+
+// ═══════════════════════════════════════
+// MODALS
+// ═══════════════════════════════════════
+function closeModal(id) { document.getElementById(id)?.classList.remove('open'); }
+
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('modal-bg')) e.target.classList.remove('open');
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal-bg.open').forEach(m => m.classList.remove('open'));
+});
+
+// ═══════════════════════════════════════
+// ADMIN TOAST
+// ═══════════════════════════════════════
+function aToast(msg, isError = false) {
+  let stack = document.getElementById('aToastStack');
+  if (!stack) {
+    stack = document.createElement('div');
+    stack.id = 'aToastStack';
+    stack.style.cssText = 'position:fixed;bottom:1.75rem;right:1.75rem;z-index:5000;display:flex;flex-direction:column;gap:.5rem;';
+    document.body.appendChild(stack);
+  }
+  const el = document.createElement('div');
+  el.style.cssText = `background:var(--ink-2);border:1px solid ${isError ? 'rgba(239,68,68,.4)' : 'var(--gold-rim)'};border-radius:var(--rs);padding:.875rem 1.25rem;font-size:.8rem;font-weight:500;box-shadow:0 8px 32px rgba(0,0,0,.5);transform:translateX(120%);opacity:0;transition:all .35s var(--spring);min-width:200px;color:${isError?'var(--red)':'var(--t1)'};`;
+  el.textContent = msg;
+  stack.appendChild(el);
+  requestAnimationFrame(() => requestAnimationFrame(() => { el.style.transform = 'translateX(0)'; el.style.opacity = '1'; }));
+  setTimeout(() => { el.style.transform = 'translateX(120%)'; el.style.opacity = '0'; setTimeout(() => el.remove(), 400); }, 3500);
+}
+</script>
+</body>
+</html>

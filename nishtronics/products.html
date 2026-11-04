@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="description" content="Shop premium car audio, subwoofers, amplifiers, head units. Kenwood, Pioneer, Nakamichi, Kicker, Sundown, Rockford Fosgate. Nishtronics Soundlabs Nairobi."/>
+<title>Products — Nishtronics Soundlabs</title>
+<link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><div class="lm"><svg width="16" height="16" viewBox="0 0 28 28" fill="none"><path d="M7 20V8l14 6-14 6z" fill="#e8c96a"/></svg></div>NISHTRONICS <span>SOUNDLABS</span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a><a href="about.html">About</a><a href="services.html">Services</a>
+      <a href="products.html">Products</a><a href="gallery.html">Gallery</a>
+      <a href="booking.html">Book a Job</a><a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-cart-btn" id="openCart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>Cart <span class="cart-pip zero" id="cartPip">0</span></button>
+      <button class="hamburger" id="menuBtn"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a><a href="about.html">About</a><a href="services.html">Services</a>
+  <a href="products.html">Products</a><a href="gallery.html">Gallery</a>
+  <a href="booking.html">Book a Job</a><a href="contact.html">Contact</a>
+</div>
+
+<!-- PAGE HERO — speaker array image -->
+<section class="page-hero">
+  <img class="page-hero-bg" src="https://images.unsplash.com/photo-1545671913-b89ac1b4ac10?w=1600&q=80" alt=""/>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-inner container">
+    <span class="page-kicker">Shop</span>
+    <h1>Our Products</h1>
+    <p style="color:var(--t2);margin-top:.875rem;font-size:.92rem;letter-spacing:.5px;">
+      Kenwood · Pioneer · Nakamichi · Sundown · Kicker · Rockford · Taramps
+    </p>
+  </div>
+</section>
+
+<!-- PRODUCTS SECTION — dark left cut -->
+<section class="cut-top" style="background:var(--ink);padding:8rem 0;">
+  <div class="container">
+
+    <!-- FILTER BAR -->
+    <div class="filter-wrap">
+      <div class="filter-row">
+        <div class="search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="searchInput" placeholder="Search products, brands…"/>
+        </div>
+        <div class="sort-wrap">
+          <select id="sortSelect">
+            <option value="">Sort: Default</option>
+            <option value="price-asc">Price: Low → High</option>
+            <option value="price-desc">Price: High → Low</option>
+            <option value="name">Name A–Z</option>
+          </select>
+        </div>
+      </div>
+      <!-- Categories -->
+      <div class="filter-row">
+        <div class="chips" id="catChips">
+          <button class="chip active" data-cat="all">All</button>
+          <button class="chip" data-cat="speakers">Speakers</button>
+          <button class="chip" data-cat="subwoofers">Subwoofers</button>
+          <button class="chip" data-cat="headunits">Head Units</button>
+          <button class="chip" data-cat="amplifiers">Amplifiers</button>
+          <button class="chip" data-cat="accessories">Accessories</button>
+          <button class="chip" data-cat="trackers">Trackers</button>
+          <button class="chip" data-cat="secondhand">2nd Hand</button>
+        </div>
+      </div>
+      <!-- Brands (populated by JS) -->
+      <div class="filter-row">
+        <div class="chips" id="brandChips"></div>
+      </div>
+    </div>
+
+    <!-- Firebase status -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:.75rem;">
+      <div class="results-info" id="resultsInfo" style="margin:0;">Loading…</div>
+      <div class="fb-badge"><span class="fb-dot" id="fbDot"></span><span class="fb-label">Local mode</span></div>
+    </div>
+
+    <!-- PRODUCT GRID -->
+    <div class="g4" id="productGrid">
+      <!-- 8 skeleton cards while loading -->
+      <div class="skel-card"><div class="skeleton skel-img"></div><div class="skel-body"><div class="skeleton skel-line skel-s"></div><div class="skeleton skel-line skel-m" style="margin-top:.4rem"></div><div class="skeleton skel-line skel-l" style="margin-top:.4rem"></div><div class="skeleton skel-line skel-s" style="margin-top:.75rem"></div></div></div>
+      <div class="skel-card"><div class="skeleton skel-img"></div><div class="skel-body"><div class="skeleton skel-line skel-s"></div><div class="skeleton skel-line skel-m" style="margin-top:.4rem"></div><div class="skeleton skel-line skel-l" style="margin-top:.4rem"></div><div class="skeleton skel-line skel-s" style="margin-top:.75rem"></div></div></div>
+      <div class="skel-card"><div class="skeleton skel-img"></div><div class="skel-body"><div class="skeleton skel-line skel-s"></div><div class="skeleton skel-line skel-m" style="margin-top:.4rem"></div><div class="skeleton skel-line skel-l" style="margin-top:.4rem"></div><div class="skeleton skel-line skel-s" style="margin-top:.75rem"></div></div></div>
+      <div class="skel-card"><div class="skeleton skel-img"></div><div class="skel-body"><div class="skeleton skel-line skel-s"></div><div class="skeleton skel-line skel-m" style="margin-top:.4rem"></div><div class="skeleton skel-line skel-l" style="margin-top:.4rem"></div><div class="skeleton skel-line skel-s" style="margin-top:.75rem"></div></div></div>
+      <div class="skel-card"><div class="skeleton skel-img"></div><div class="skel-body"><div class="skeleton skel-line skel-s"></div><div class="skeleton skel-line skel-m" style="margin-top:.4rem"></div><div class="skeleton skel-line skel-l" style="margin-top:.4rem"></div></div></div>
+      <div class="skel-card"><div class="skeleton skel-img"></div><div class="skel-body"><div class="skeleton skel-line skel-s"></div><div class="skeleton skel-line skel-m" style="margin-top:.4rem"></div><div class="skeleton skel-line skel-l" style="margin-top:.4rem"></div></div></div>
+      <div class="skel-card"><div class="skeleton skel-img"></div><div class="skel-body"><div class="skeleton skel-line skel-s"></div><div class="skeleton skel-line skel-m" style="margin-top:.4rem"></div><div class="skeleton skel-line skel-l" style="margin-top:.4rem"></div></div></div>
+      <div class="skel-card"><div class="skeleton skel-img"></div><div class="skel-body"><div class="skeleton skel-line skel-s"></div><div class="skeleton skel-line skel-m" style="margin-top:.4rem"></div><div class="skeleton skel-line skel-l" style="margin-top:.4rem"></div></div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CAN'T FIND IT — image bg, right diagonal -->
+<section class="imgbg cut-top-r" style="padding:8rem 0;">
+  <img class="bg-photo" src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1600&q=70" alt=""/>
+  <div class="bg-tint" style="background:rgba(5,5,10,.87)"></div>
+  <div class="bg-grain"></div>
+  <div class="sec-inner container tc">
+    <div class="cta-inner reveal" style="max-width:600px;margin:0 auto;">
+      <h2 style="margin-bottom:1rem;">Can't Find What You Need?</h2>
+      <p style="color:var(--t2);max-width:440px;margin:0 auto 2rem;line-height:1.7;">We can source almost any audio brand. Message us on WhatsApp and we'll track it down — no matter how niche.</p>
+      <a href="https://wa.me/254700000000?text=Hi%2C%20I'm%20looking%20for%20a%20specific%20product.%20Can%20you%20source%20it%20for%20me%3F" class="btn btn-wa btn-lg" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Ask on WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer"><div class="container"><div class="footer-grid">
+  <div><div class="footer-brand">NISHTRONICS <span>SOUNDLABS</span></div><p class="footer-tag">Your one stop audio shop. Nairobi, Kenya.</p></div>
+  <div class="footer-col"><h5>Pages</h5><ul><li><a href="index.html">Home</a></li><li><a href="products.html">Products</a></li><li><a href="services.html">Services</a></li><li><a href="booking.html">Book a Job</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+  <div class="footer-col"><h5>Categories</h5><ul><li><a href="products.html">Subwoofers</a></li><li><a href="products.html">Speakers</a></li><li><a href="products.html">Head Units</a></li><li><a href="products.html">Amplifiers</a></li><li><a href="products.html">2nd Hand</a></li></ul></div>
+  <div class="footer-col"><h5>Contact</h5><ul><li><a href="tel:+254700000000">+254 700 000 000</a></li></ul></div>
+</div><div class="footer-bottom"><p class="footer-copy">&copy; <span class="footer-year"></span> Nishtronics Soundlabs.</p><a href="admin/index.html" class="footer-admin">Admin ↗</a></div></div></footer>
+
+<div class="wa-bubble"><a href="https://wa.me/254700000000" target="_blank" rel="noopener"><svg width="26" height="26" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a></div>
+<button class="scroll-top" id="scrollTop">↑</button>
+
+<script src="js/firebase.js"></script>
+<script src="js/main.js"></script>
+<script src="js/products.js"></script>
+</body>
+</html>

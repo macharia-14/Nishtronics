@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Cart & Checkout — Nishtronics Soundlabs</title>
+<link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><div class="lm"><svg width="16" height="16" viewBox="0 0 28 28" fill="none"><path d="M7 20V8l14 6-14 6z" fill="#e8c96a"/></svg></div>NISHTRONICS <span>SOUNDLABS</span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Home</a><a href="about.html">About</a><a href="services.html">Services</a>
+      <a href="products.html">Products</a><a href="gallery.html">Gallery</a>
+      <a href="booking.html">Book a Job</a><a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-cart-btn" id="openCart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>Cart <span class="cart-pip zero" id="cartPip">0</span></button>
+      <button class="hamburger" id="menuBtn"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a><a href="products.html">Products</a>
+  <a href="booking.html">Book a Job</a><a href="contact.html">Contact</a>
+</div>
+
+<!-- PAGE HERO -->
+<section class="page-hero" style="padding:calc(var(--nav-h) + 3rem) 0 4rem;">
+  <img class="page-hero-bg" src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1600&q=70" alt=""/>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-inner container">
+    <span class="page-kicker">Order</span>
+    <h1>Your Cart</h1>
+  </div>
+</section>
+
+<!-- CART CONTENT -->
+<section class="cut-top" style="background:var(--ink);padding:8rem 0 6rem;">
+  <div class="container">
+
+    <!-- EMPTY STATE -->
+    <div id="cartEmpty" style="display:none;text-align:center;padding:5rem 2rem;">
+      <div style="font-size:4rem;margin-bottom:1.5rem;opacity:.25;">🛒</div>
+      <h2 style="margin-bottom:1rem;font-size:2rem;">Your cart is empty</h2>
+      <p style="color:var(--t2);margin-bottom:2rem;">Browse our range and add some items to get started.</p>
+      <a href="products.html" class="btn btn-gold btn-lg">Browse Products</a>
+    </div>
+
+    <!-- FILLED CART -->
+    <div id="cartContent" style="display:none;">
+      <div class="co-layout">
+
+        <!-- Items list -->
+        <div>
+          <div class="co-items-card">
+            <div class="co-card-head">
+              <h3 style="font-size:.9rem;letter-spacing:.5px;">Cart Items</h3>
+              <button onclick="cpClear()" class="btn btn-ghost btn-sm">Clear Cart</button>
+            </div>
+            <div id="coItems"></div>
+          </div>
+          <a href="products.html" class="btn btn-ghost btn-sm" style="margin-top:1rem;">← Continue Shopping</a>
+        </div>
+
+        <!-- Summary & form -->
+        <div class="order-box">
+          <h3 class="info-card-head" style="font-size:.9rem;letter-spacing:.5px;">Order Summary</h3>
+          <div class="sum-line"><span id="sumItems">0 items</span><span id="sumTotal">KSh 0</span></div>
+          <div class="sum-line"><span>Delivery</span><span style="color:var(--gold);font-size:.78rem;">Arranged via WhatsApp</span></div>
+          <div class="sum-div"></div>
+          <div class="sum-total"><span class="sum-tl">Total</span><span class="sum-tv" id="sumFinal">KSh 0</span></div>
+
+          <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--line);">
+            <div style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:2.5px;color:var(--t3);margin-bottom:1rem;">Your Details</div>
+            <div class="fg"><label class="flabel">Name <span class="req">*</span></label><input class="finput" type="text" id="oName" placeholder="e.g. John Kamau"/></div>
+            <div class="fg"><label class="flabel">Phone <span class="req">*</span></label><input class="finput" type="tel" id="oPhone" placeholder="e.g. 0712 345 678"/></div>
+            <div class="fg"><label class="flabel">Fulfilment</label>
+              <select class="fselect" id="oDelivery" onchange="toggleDelivery()">
+                <option value="Pickup">Pickup from shop</option>
+                <option value="Delivery">Delivery to me</option>
+              </select>
+            </div>
+            <div class="fg" id="oLocationGroup" style="display:none;">
+              <label class="flabel">Delivery Location</label>
+              <input class="finput" type="text" id="oLocation" placeholder="e.g. Westlands, Nairobi"/>
+            </div>
+            <div class="fg"><label class="flabel">Notes (optional)</label>
+              <textarea class="ftextarea" id="oNotes" placeholder="Any special requests?" style="min-height:72px;"></textarea>
+            </div>
+            <button onclick="sendWhatsAppOrder()" class="btn btn-wa btn-full btn-lg" style="margin-top:.5rem;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Send Order on WhatsApp
+            </button>
+            <p style="font-size:.65rem;color:var(--t3);text-align:center;margin-top:.6rem;line-height:1.5;">Opens WhatsApp with your full order pre-filled. We'll confirm availability and pricing with you directly.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer class="footer"><div class="container"><div class="footer-bottom"><p class="footer-copy">&copy; <span class="footer-year"></span> Nishtronics Soundlabs. All rights reserved.</p></div></div></footer>
+
+<div class="wa-bubble"><a href="https://wa.me/254700000000" target="_blank" rel="noopener"><svg width="26" height="26" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a></div>
+<button class="scroll-top" id="scrollTop">↑</button>
+<script src="js/firebase.js"></script>
+<script src="js/main.js"></script>
+<script src="js/cart.js"></script>
+<script>
+function toggleDelivery() {
+  const v = document.getElementById('oDelivery')?.value;
+  const g = document.getElementById('oLocationGroup');
+  if (g) g.style.display = v === 'Delivery' ? 'flex' : 'none';
+}
+</script>
+</body>
+</html>

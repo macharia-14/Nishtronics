@@ -1,0 +1,59 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Paste the UID of your admin user here (Firebase Console → Authentication → Users → User UID).
+    // Everything admin-only below keys off this ONE account, so a stranger who signs up
+    // through the public API key still cannot read or write anything.
+    function isAdmin() {
+      return request.auth != null && request.auth.uid == 'PASTE_ADMIN_UID_HERE';
+    }
+    function str(v, max) { return v is string && v.size() <= max; }
+
+    // Catalog: anyone can read, only admin can change
+    match /products/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Orders: customers may create one (validated shape, size-capped), only admin can read/change
+    match /orders/{id} {
+      allow create: if
+        request.resource.data.keys().hasOnly(
+          ['customer','phone','delivery','location','items','total','notes','status','createdAt'])
+        && request.resource.data.keys().hasAll(['customer','phone','items','total','status'])
+        && str(request.resource.data.customer, 100) && request.resource.data.customer.size() > 0
+        && str(request.resource.data.phone, 30)     && request.resource.data.phone.size() > 0
+        && str(request.resource.data.get('delivery', ''), 20)
+        && str(request.resource.data.get('location', ''), 300)
+        && str(request.resource.data.get('notes', ''), 1000)
+        && request.resource.data.items is list
+        && request.resource.data.items.size() > 0 && request.resource.data.items.size() <= 30
+        && request.resource.data.total is number
+        && request.resource.data.total >= 0 && request.resource.data.total <= 10000000
+        && request.resource.data.get('createdAt', 0) is number
+        && request.resource.data.status == 'new';
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Bookings: same idea
+    match /bookings/{id} {
+      allow create: if
+        request.resource.data.keys().hasOnly(
+          ['name','phone','services','vehicle','date','time','budget','notes','status','createdAt'])
+        && request.resource.data.keys().hasAll(['name','phone','services','status'])
+        && str(request.resource.data.name, 100)  && request.resource.data.name.size() > 0
+        && str(request.resource.data.phone, 30)  && request.resource.data.phone.size() > 0
+        && request.resource.data.services is list
+        && request.resource.data.services.size() > 0 && request.resource.data.services.size() <= 15
+        && str(request.resource.data.get('vehicle', ''), 120)
+        && str(request.resource.data.get('date', ''), 20)
+        && str(request.resource.data.get('time', ''), 20)
+        && str(request.resource.data.get('budget', ''), 60)
+        && str(request.resource.data.get('notes', ''), 1000)
+        && request.resource.data.get('createdAt', 0) is number
+        && request.resource.data.status == 'new';
+      allow read, update, delete: if isAdmin();
+    }
+  }
+}
