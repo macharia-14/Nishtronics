@@ -1,0 +1,8 @@
+dist/
+dist.zip
+images/_incoming/*
+!images/_incoming/.gitkeep
+images/_incoming/gallery/*
+images/_incoming/blog/*
+.DS_Store
+__pycache__/

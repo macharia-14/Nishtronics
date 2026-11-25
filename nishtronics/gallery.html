@@ -6,30 +6,44 @@
 <link rel="stylesheet" href="css/style.css"/>
 </head>
 <body>
+<script src="js/icons.js"></script>
 
-<nav class="nav" id="nav">
+<header class="nav" id="nav">
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo"><div class="lm"><svg width="16" height="16" viewBox="0 0 28 28" fill="none"><path d="M7 20V8l14 6-14 6z" fill="#e8c96a"/></svg></div>NISHTRONICS <span>SOUNDLABS</span></a>
-    <div class="nav-links" id="navLinks">
-      <a href="index.html">Home</a><a href="about.html">About</a><a href="services.html">Services</a>
-      <a href="products.html">Products</a><a href="gallery.html">Gallery</a>
-      <a href="booking.html">Book a Job</a><a href="contact.html">Contact</a>
-    </div>
+    <a href="index.html" class="nav-logo" aria-label="Nishtronics Soundlabs, home"><span class="lm"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-wave"/></svg></span><span class="nav-brand"><b>NISHTRONICS</b><small>SOUNDLABS</small></span></a>
+    <nav class="nav-links" id="navLinks" aria-label="Main">
+      <a href="index.html">Home</a><a href="products.html">Products</a><a href="services.html">Services</a><a href="gallery.html" aria-current="page">Gallery</a><a href="blog.html">Blog</a><a href="about.html">About</a><a href="contact.html">Contact</a>
+      <span class="nav-fader" aria-hidden="true"></span>
+    </nav>
     <div class="nav-actions">
-      <button class="nav-cart-btn" id="openCart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>Cart <span class="cart-pip zero" id="cartPip">0</span></button>
-      <button class="hamburger" id="menuBtn"><span></span><span></span><span></span></button>
+      <a class="nav-phone" href="tel:+254700000000"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg><span>+254 700 000 000</span></a>
+      <button class="theme-toggle nav-icon" id="themeToggle" data-theme-toggle aria-label="Switch to light theme" title="Light / dark theme"><svg class="i i-sun" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg><svg class="i i-moon" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg></button>
+      <button class="nav-icon nav-cart" id="openCart" aria-label="Open cart"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-cart"/></svg><span class="cart-pip zero" id="cartPip">0</span></button>
+      <a class="nav-cta" href="booking.html"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-calendar"/></svg><span>Book a job</span></a>
+      <button class="nav-icon nav-burger" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-menu"/></svg></button>
     </div>
   </div>
-</nav>
-<div class="mobile-menu" id="mobileMenu">
-  <a href="index.html">Home</a><a href="about.html">About</a><a href="services.html">Services</a>
-  <a href="products.html">Products</a><a href="gallery.html">Gallery</a>
-  <a href="booking.html">Book a Job</a><a href="contact.html">Contact</a>
-</div>
+</header>
+<div class="nav-scrim" id="navScrim"></div>
+<aside class="mobile-menu" id="mobileMenu" aria-label="Menu">
+  <div class="mm-head">
+    <span class="nav-brand"><b>NISHTRONICS</b><small>SOUNDLABS</small></span>
+    <button class="theme-toggle nav-icon" data-theme-toggle aria-label="Switch to light theme" title="Light / dark theme"><svg class="i i-sun" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg><svg class="i i-moon" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg></button>
+    <button class="nav-icon mm-close" aria-label="Close menu"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-x"/></svg></button>
+  </div>
+  <nav class="mm-links" aria-label="Mobile">
+    <a href="index.html"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-home"/></svg>Home</a><a href="products.html"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-package"/></svg>Products</a><a href="services.html"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-tool"/></svg>Services</a><a href="gallery.html" aria-current="page"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-image"/></svg>Gallery</a><a href="blog.html"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-book-open"/></svg>Blog</a><a href="about.html"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-info"/></svg>About</a><a href="contact.html"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-message-circle"/></svg>Contact</a>
+  </nav>
+  <div class="mm-foot">
+    <a class="btn btn-gold" href="booking.html"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-calendar"/></svg>Book a job</a>
+    <a class="btn btn-wa" href="https://wa.me/254700000000" target="_blank" rel="noopener"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg>WhatsApp us</a>
+    <a class="mm-phone" href="tel:+254700000000"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-phone"/></svg><span>+254 700 000 000</span></a>
+  </div>
+</aside>
 
 <!-- PAGE HERO — full bleed installation photo -->
 <section class="page-hero">
-  <img class="page-hero-bg" src="https://images.unsplash.com/photo-1558618047-3c0d8b4d7f0c?w=1600&q=80" alt=""/>
+  <img class="page-hero-bg" src="images/bg/theatre-2.webp" alt=""/>
   <div class="page-hero-overlay"></div>
   <div class="page-hero-inner container">
     <span class="page-kicker">Our Work</span>
@@ -53,25 +67,25 @@
     </div>
 
     <div class="gal-grid" id="galGrid" style="max-width:1200px;margin:0 auto;">
-      <div class="gal-item reveal" data-cat="car" data-lb="https://images.unsplash.com/photo-1558618047-3c0d8b4d7f0c?w=1600&q=90"><img src="https://images.unsplash.com/photo-1558618047-3c0d8b4d7f0c?w=700&q=80" alt="Car audio install" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
-      <div class="gal-item reveal" data-cat="home" data-lb="https://images.unsplash.com/photo-1545571408-dd25b1b6c25a?w=1600&q=90"><img src="https://images.unsplash.com/photo-1545571408-dd25b1b6c25a?w=700&q=80" alt="Home theatre setup" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
-      <div class="gal-item reveal" data-cat="car" data-lb="https://images.unsplash.com/photo-1545671913-b89ac1b4ac10?w=1600&q=90"><img src="https://images.unsplash.com/photo-1545671913-b89ac1b4ac10?w=700&q=80" alt="Speaker install" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
-      <div class="gal-item reveal" data-cat="car" data-lb="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=1600&q=90"><img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=700&q=80" alt="Dashboard install" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
-      <div class="gal-item reveal" data-cat="car" data-lb="https://images.unsplash.com/photo-1571954775026-371c4f489886?w=1600&q=90"><img src="https://images.unsplash.com/photo-1571954775026-371c4f489886?w=700&q=80" alt="Car audio system" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
-      <div class="gal-item reveal" data-cat="car" data-lb="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&q=90"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80" alt="Head unit install" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
-      <div class="gal-item reveal" data-cat="custom" data-lb="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1600&q=90"><img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=700&q=80" alt="Amplifier rack" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
-      <div class="gal-item reveal" data-cat="custom" data-lb="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1600&q=90"><img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=700&q=80" alt="Car exterior" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
-      <div class="gal-item reveal" data-cat="home" data-lb="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=1600&q=90"><img src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=700&q=80" alt="TV setup" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
-      <div class="gal-item reveal" data-cat="car" data-lb="https://images.unsplash.com/photo-1494905998402-395d579af36f?w=1600&q=90"><img src="https://images.unsplash.com/photo-1494905998402-395d579af36f?w=700&q=80" alt="Car interior" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
-      <div class="gal-item reveal" data-cat="custom" data-lb="https://images.unsplash.com/photo-1547327132-b4b40e41e944?w=1600&q=90"><img src="https://images.unsplash.com/photo-1547327132-b4b40e41e944?w=700&q=80" alt="Car accessories" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
-      <div class="gal-item reveal" data-cat="home" data-lb="https://images.unsplash.com/photo-1461151304267-38535e780c79?w=1600&q=90"><img src="https://images.unsplash.com/photo-1461151304267-38535e780c79?w=700&q=80" alt="Sound system" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
+      <div class="gal-item reveal" data-cat="car" data-lb="images/gallery/gal-car-1.webp"><img src="images/gallery/gal-car-1.webp" alt="Car audio install" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
+      <div class="gal-item reveal" data-cat="home" data-lb="images/gallery/gal-home-1.webp"><img src="images/gallery/gal-home-1.webp" alt="Home theatre setup" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
+      <div class="gal-item reveal" data-cat="car" data-lb="images/gallery/gal-car-2.webp"><img src="images/gallery/gal-car-2.webp" alt="Speaker install" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
+      <div class="gal-item reveal" data-cat="car" data-lb="images/gallery/gal-car-3.webp"><img src="images/gallery/gal-car-3.webp" alt="Dashboard install" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
+      <div class="gal-item reveal" data-cat="car" data-lb="images/gallery/gal-car-4.webp"><img src="images/gallery/gal-car-4.webp" alt="Car audio system" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
+      <div class="gal-item reveal" data-cat="car" data-lb="images/gallery/gal-car-5.webp"><img src="images/gallery/gal-car-5.webp" alt="Head unit install" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
+      <div class="gal-item reveal" data-cat="custom" data-lb="images/gallery/gal-custom-1.webp"><img src="images/gallery/gal-custom-1.webp" alt="Amplifier rack" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
+      <div class="gal-item reveal" data-cat="custom" data-lb="images/gallery/gal-custom-2.webp"><img src="images/gallery/gal-custom-2.webp" alt="Car exterior" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
+      <div class="gal-item reveal" data-cat="home" data-lb="images/gallery/gal-home-2.webp"><img src="images/gallery/gal-home-2.webp" alt="TV setup" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
+      <div class="gal-item reveal" data-cat="car" data-lb="images/gallery/gal-car-6.webp"><img src="images/gallery/gal-car-6.webp" alt="Car interior" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
+      <div class="gal-item reveal" data-cat="custom" data-lb="images/gallery/gal-custom-3.webp"><img src="images/gallery/gal-custom-3.webp" alt="Car accessories" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
+      <div class="gal-item reveal" data-cat="home" data-lb="images/gallery/gal-home-3.webp"><img src="images/gallery/gal-home-3.webp" alt="Sound system" loading="lazy"/><div class="gal-ov"><svg width="24" height="24" fill="none" stroke="var(--gold)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div></div>
     </div>
   </div>
 </section>
 
 <!-- FEATURE YOUR CAR — image bg, right diagonal -->
 <section class="imgbg cut-top-r" style="padding:8rem 0;">
-  <img class="bg-photo" src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1600&q=70" alt=""/>
+  <img class="bg-photo" src="images/bg/cone-5.webp" alt=""/>
   <div class="bg-tint" style="background:rgba(5,5,10,.87)"></div>
   <div class="bg-grain"></div>
   <div class="sec-inner container tc">
@@ -88,21 +102,21 @@
 
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox">
-  <button class="icon-btn lb-close" id="lbClose" style="width:44px;height:44px;border-radius:50%;">✕</button>
-  <button class="lb-nav lb-prev" id="lbPrev">‹</button>
+  <button class="icon-btn lb-close" id="lbClose" aria-label="Close" style="width:44px;height:44px;border-radius:50%;"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-x"/></svg></button>
+  <button class="lb-nav lb-prev" id="lbPrev" aria-label="Previous"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-chevron-left"/></svg></button>
   <img class="lb-img" id="lbImg" src="" alt="Gallery image"/>
-  <button class="lb-nav lb-next" id="lbNext">›</button>
+  <button class="lb-nav lb-next" id="lbNext" aria-label="Next"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-chevron-right"/></svg></button>
 </div>
 
 <footer class="footer"><div class="container"><div class="footer-grid">
   <div><div class="footer-brand">NISHTRONICS <span>SOUNDLABS</span></div><p class="footer-tag">Your one stop audio shop. Nairobi, Kenya.</p></div>
-  <div class="footer-col"><h5>Pages</h5><ul><li><a href="index.html">Home</a></li><li><a href="products.html">Products</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="booking.html">Book a Job</a></li></ul></div>
+  <div class="footer-col"><h5>Pages</h5><ul><li><a href="index.html">Home</a></li><li><a href="products.html">Products</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="blog.html">Blog</a></li><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li><li><a href="booking.html">Book a Job</a></li></ul></div>
   <div class="footer-col"><h5>Services</h5><ul><li><a href="services.html">Car Audio</a></li><li><a href="services.html">Home Theatre</a></li><li><a href="services.html">Custom Builds</a></li></ul></div>
   <div class="footer-col"><h5>Contact</h5><ul><li><a href="tel:+254700000000">+254 700 000 000</a></li></ul></div>
 </div><div class="footer-bottom"><p class="footer-copy">&copy; <span class="footer-year"></span> Nishtronics Soundlabs. All rights reserved.</p></div></div></footer>
 
 <div class="wa-bubble"><a href="https://wa.me/254700000000" target="_blank" rel="noopener"><svg width="26" height="26" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a></div>
-<button class="scroll-top" id="scrollTop">↑</button>
+<button class="scroll-top" id="scrollTop" aria-label="Back to top"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-arrow-up"/></svg></button>
 
 <script src="js/firebase.js"></script>
 <script src="js/main.js"></script>

@@ -22,7 +22,7 @@ os.chdir(root)
 n = a.number
 display = f'+{n[:3]} {n[3:6]} {n[6:9]} {n[9:]}'
 
-files = glob.glob('*.html') + glob.glob('*.snippet') + glob.glob('js/*.js')
+files = glob.glob('*.html') + glob.glob('blog/*.html') + glob.glob('*.snippet') + glob.glob('js/*.js')
 changed = {}
 for f in files:
     s = o = open(f, encoding='utf-8').read()

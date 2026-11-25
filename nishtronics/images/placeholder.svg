@@ -1,9 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-label="Photo coming soon">
-  <rect width="600" height="600" fill="#0d0d14"/>
-  <g fill="none" stroke="#e8c96a" stroke-width="10" stroke-linecap="round" opacity=".55">
-    <circle cx="300" cy="290" r="110"/>
-    <circle cx="300" cy="290" r="42"/>
-    <circle cx="300" cy="290" r="150" stroke-width="4" opacity=".5"/>
+  <g fill="none" stroke="#b08a2e" stroke-linecap="round">
+    <circle cx="300" cy="280" r="150" stroke-width="8" opacity=".7"/>
+    <circle cx="300" cy="280" r="128" stroke-width="2" opacity=".35"/>
+    <circle cx="300" cy="280" r="108" stroke-width="2" opacity=".3"/>
+    <circle cx="300" cy="280" r="88" stroke-width="2" opacity=".25"/>
+    <path d="M205 190a135 135 0 0 1 70-52" stroke-width="6" opacity=".45"/>
   </g>
-  <text x="300" y="500" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" letter-spacing="6" fill="#8a8a99">PHOTO COMING SOON</text>
+  <path fill="#b08a2e" opacity=".75" fill-rule="evenodd" d="M300 280m-54 0a54 54 0 1 0 108 0a54 54 0 1 0-108 0M300 280m-8 0a8 8 0 1 0 16 0a8 8 0 1 0-16 0"/>
+  <text x="300" y="500" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" letter-spacing="6" fill="#8c8778">PHOTO COMING SOON</text>
 </svg>

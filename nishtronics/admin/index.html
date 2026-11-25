@@ -26,6 +26,7 @@ input[type=number].pcell::-webkit-inner-spin-button { -webkit-appearance:auto; }
 <meta name="robots" content="noindex,nofollow">
 </head>
 <body>
+<script src="../js/icons.js"></script>
 
 <!-- ══ LOGIN ══ -->
 <div class="adm-login" id="loginScreen">
@@ -56,15 +57,15 @@ input[type=number].pcell::-webkit-inner-spin-button { -webkit-appearance:auto; }
         <small>Admin Panel</small>
       </div>
       <nav class="adm-nav">
-        <a class="active" onclick="showSec('dashboard')"><span>📊</span> Dashboard</a>
-        <a onclick="showSec('products')"><span>📦</span> Products</a>
-        <a onclick="showSec('orders')"><span>🛒</span> Orders</a>
-        <a onclick="showSec('bookings')"><span>📅</span> Bookings</a>
-        <a onclick="showSec('settings')"><span>⚙️</span> Settings</a>
-        <a onclick="doLogout()" style="margin-top:auto;border-top:1px solid var(--line);"><span>🚪</span> Logout</a>
+        <a class="active" onclick="showSec('dashboard')"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-bar-chart"/></svg> Dashboard</a>
+        <a onclick="showSec('products')"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-package"/></svg> Products</a>
+        <a onclick="showSec('orders')"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-cart"/></svg> Orders</a>
+        <a onclick="showSec('bookings')"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-calendar"/></svg> Bookings</a>
+        <a onclick="showSec('settings')"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-settings"/></svg> Settings</a>
+        <a onclick="doLogout()" style="margin-top:auto;border-top:1px solid var(--line);"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-log-out"/></svg> Logout</a>
       </nav>
       <div style="padding:1rem 1.25rem;">
-        <a href="../index.html" class="btn btn-ghost btn-sm btn-full" target="_blank">View Site →</a>
+        <a href="../index.html" class="btn btn-ghost btn-sm btn-full" target="_blank">View site</a>
       </div>
     </div>
 
@@ -81,7 +82,7 @@ input[type=number].pcell::-webkit-inner-spin-button { -webkit-appearance:auto; }
           <div style="display:flex;align-items:center;gap:1rem;">
             <div class="fb-badge"><span class="fb-dot" id="fbDot"></span><span class="fb-label" id="fbLabel">Checking…</span></div>
             <div id="adClock" style="font-family:var(--fm);font-size:1.2rem;color:var(--gold);"></div>
-            <button class="theme-toggle" id="themeToggleAdmin" aria-label="Toggle light/dark theme" title="Light/Dark theme">☀️</button>
+            <button class="theme-toggle round" id="themeToggleAdmin" aria-label="Switch to light theme" title="Light / dark theme"><svg class="i i-sun" aria-hidden="true" focusable="false"><use href="#i-sun"/></svg><svg class="i i-moon" aria-hidden="true" focusable="false"><use href="#i-moon"/></svg></button>
           </div>
         </div>
 
@@ -98,7 +99,7 @@ input[type=number].pcell::-webkit-inner-spin-button { -webkit-appearance:auto; }
             <button onclick="showSec('products');openAddProduct()" class="btn btn-gold btn-sm">+ Add Product</button>
             <button onclick="showSec('orders');openAddOrder()" class="btn btn-outline btn-sm">+ Log Order</button>
             <button onclick="showSec('bookings');openAddBooking()" class="btn btn-outline btn-sm">+ Add Booking</button>
-            <a href="../products.html" class="btn btn-ghost btn-sm" target="_blank">View Shop ↗</a>
+            <a href="../products.html" class="btn btn-ghost btn-sm" target="_blank">View shop</a>
           </div>
           <div class="seed-btn-wrap">
             <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--t3);margin-bottom:.5rem;">Firebase Setup</div>
@@ -144,7 +145,7 @@ input[type=number].pcell::-webkit-inner-spin-button { -webkit-appearance:auto; }
         <div class="adm-card">
           <div class="adm-card-head"><h3 style="font-size:.88rem;">Order History</h3></div>
           <div id="ordersEmpty" style="padding:3rem;text-align:center;color:var(--t3);">
-            <div style="font-size:3rem;margin-bottom:1rem;opacity:.2;">📋</div>
+            <div style="margin-bottom:1rem;opacity:.25;"><svg class="i" style="width:48px;height:48px;stroke-width:1.3" aria-hidden="true" focusable="false"><use href="#i-clipboard"/></svg></div>
             <p>No orders logged yet. When customers send WhatsApp orders, log them here.</p>
           </div>
           <div class="atw" id="ordersTableWrap" style="display:none;">
@@ -165,7 +166,7 @@ input[type=number].pcell::-webkit-inner-spin-button { -webkit-appearance:auto; }
         <div class="adm-card">
           <div class="adm-card-head"><h3 style="font-size:.88rem;">All Bookings</h3></div>
           <div id="bookingsEmpty" style="padding:3rem;text-align:center;color:var(--t3);">
-            <div style="font-size:3rem;margin-bottom:1rem;opacity:.2;">📅</div>
+            <div style="margin-bottom:1rem;opacity:.25;"><svg class="i" style="width:48px;height:48px;stroke-width:1.3" aria-hidden="true" focusable="false"><use href="#i-calendar"/></svg></div>
             <p>No bookings yet. Incoming WhatsApp booking requests can be logged here.</p>
           </div>
           <div class="atw" id="bookingsTableWrap" style="display:none;">
@@ -206,7 +207,7 @@ input[type=number].pcell::-webkit-inner-spin-button { -webkit-appearance:auto; }
   <div class="modal">
     <div class="modal-head">
       <h3 id="productModalTitle">Add Product</h3>
-      <button onclick="closeModal('productModal')" class="icon-btn" style="width:32px;height:32px;">✕</button>
+      <button onclick="closeModal('productModal')" class="icon-btn" aria-label="Close" style="width:32px;height:32px;"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-x"/></svg></button>
     </div>
     <div class="modal-body">
       <input type="hidden" id="editId"/>
@@ -260,7 +261,7 @@ input[type=number].pcell::-webkit-inner-spin-button { -webkit-appearance:auto; }
 <!-- ══ ADD ORDER MODAL ══ -->
 <div class="modal-bg" id="orderModal">
   <div class="modal">
-    <div class="modal-head"><h3>Log Order</h3><button onclick="closeModal('orderModal')" class="icon-btn" style="width:32px;height:32px;">✕</button></div>
+    <div class="modal-head"><h3>Log Order</h3><button onclick="closeModal('orderModal')" class="icon-btn" aria-label="Close" style="width:32px;height:32px;"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-x"/></svg></button></div>
     <div class="modal-body">
       <div class="frow c2">
         <div class="fg"><label class="flabel">Customer Name <span class="req">*</span></label><input class="finput" type="text" id="oName" placeholder="Customer name"/></div>
@@ -287,7 +288,7 @@ input[type=number].pcell::-webkit-inner-spin-button { -webkit-appearance:auto; }
 <!-- ══ ADD BOOKING MODAL ══ -->
 <div class="modal-bg" id="bookingModal">
   <div class="modal">
-    <div class="modal-head"><h3>Log Booking</h3><button onclick="closeModal('bookingModal')" class="icon-btn" style="width:32px;height:32px;">✕</button></div>
+    <div class="modal-head"><h3>Log Booking</h3><button onclick="closeModal('bookingModal')" class="icon-btn" aria-label="Close" style="width:32px;height:32px;"><svg class="i" aria-hidden="true" focusable="false"><use href="#i-x"/></svg></button></div>
     <div class="modal-body">
       <div class="frow c2">
         <div class="fg"><label class="flabel">Customer Name <span class="req">*</span></label><input class="finput" type="text" id="bName" placeholder="Customer name"/></div>
@@ -343,7 +344,6 @@ function applyAdminTheme(theme) {
   document.body.classList.toggle('theme-light', isLight);
   const toggle = document.getElementById('themeToggleAdmin');
   if (toggle) {
-    toggle.textContent = isLight ? '🌙' : '☀️';
     toggle.setAttribute('aria-label', isLight ? 'Switch to dark theme' : 'Switch to light theme');
   }
   localStorage.setItem(ADMIN_THEME_KEY, theme);
@@ -466,7 +466,7 @@ function renderProductTable(data) {
   }
   tbody.innerHTML = list.map((p, i) => `
     <tr>
-      <td><img src="${adminImg(p.image)}" class="a-thumb" onerror="this.onerror=null;this.src='../images/placeholder.svg'" alt=""/></td>
+      <td><img src="${adminImg(p.image || ('images/products/' + p.id + '.svg'))}" class="a-thumb" onerror="this.onerror=null;this.src='../images/placeholder.svg'" alt=""/></td>
       <td style="font-weight:600;max-width:200px;font-size:.8rem;">${p.name}</td>
       <td style="color:var(--gold);font-size:.78rem;">${p.brand}</td>
       <td style="font-size:.75rem;text-transform:capitalize;">${p.category}</td>
@@ -479,8 +479,8 @@ function renderProductTable(data) {
       <td style="font-size:.75rem;">${p.badge || '—'}</td>
       <td>
         <div class="adm-table-actions">
-          <button class="btn-icon-sm" onclick="editProduct('${p.id}')" title="Edit">✎</button>
-          <button class="btn-icon-sm del" onclick="deleteProduct('${p.id}')" title="Delete">✕</button>
+          <button class="btn-icon-sm" onclick="editProduct('${p.id}')" title="Edit" aria-label="Edit">${icon('pencil')}</button>
+          <button class="btn-icon-sm del" onclick="deleteProduct('${p.id}')" title="Delete" aria-label="Delete">${icon('trash')}</button>
         </div>
       </td>
     </tr>`).join('');
@@ -503,7 +503,7 @@ function toggleStock(id) {
   if (FIREBASE_READY) fsUpdateProduct(id, { inStock: p.inStock });
   renderProductTable();
   updateDashboard();
-  aToast(`${p.name.slice(0,28)}: ${p.inStock ? 'In Stock ✓' : 'Out of Stock'}`);
+  aToast(`${p.name.slice(0,28)}: ${p.inStock ? 'In Stock' : 'Out of Stock'}`);
 }
 
 function updatePrice(id, val) {
@@ -574,7 +574,7 @@ async function saveProduct() {
   closeModal('productModal');
   renderProductTable();
   updateDashboard();
-  aToast(editId ? 'Product updated ✓' : 'Product added ✓');
+  aToast(editId ? 'Product updated' : 'Product added');
 }
 
 async function deleteProduct(id) {
@@ -628,7 +628,7 @@ function renderOrdersTable() {
           <option value="cancelled" ${o.status==='cancelled'?'selected':''}>Cancelled</option>
         </select>
       </td>
-      <td><button class="btn-icon-sm del" onclick="deleteOrder(${i})" title="Delete">✕</button></td>
+      <td><button class="btn-icon-sm del" onclick="deleteOrder(${i})" title="Delete" aria-label="Delete">${icon('trash')}</button></td>
     </tr>`).join('');
 }
 
@@ -646,7 +646,7 @@ async function saveOrder() {
   closeModal('orderModal');
   renderOrdersTable();
   updateDashboard();
-  aToast('Order logged ✓');
+  aToast('Order logged');
   ['oName','oPhone','oItems','oTotal'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
 }
 
@@ -712,7 +712,7 @@ function renderBookingsTable() {
           <option value="cancelled" ${b.status==='cancelled'?'selected':''}>Cancelled</option>
         </select>
       </td>
-      <td><button class="btn-icon-sm del" onclick="deleteBooking(${i})" title="Delete">✕</button></td>
+      <td><button class="btn-icon-sm del" onclick="deleteBooking(${i})" title="Delete" aria-label="Delete">${icon('trash')}</button></td>
     </tr>`).join('');
 }
 
@@ -729,7 +729,7 @@ async function saveBooking() {
   await fsAddBooking(booking);
   closeModal('bookingModal');
   renderBookingsTable();
-  aToast('Booking saved ✓');
+  aToast('Booking saved');
   ['bName','bPhone','bService','bDate','bTime','bVehicle'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
 }
 
@@ -753,7 +753,7 @@ async function saveSettings() {
   try {
     await fsChangePassword(pass);
     document.getElementById('setPass').value = '';
-    aToast('Password changed ✓');
+    aToast('Password changed');
   } catch (e) {
     aToast(e && e.code === 'auth/requires-recent-login' ? 'Log out and back in, then try again' : 'Could not change password', true);
   }
@@ -771,7 +771,7 @@ async function seedFirebase() {
     const r = await fetch('../data/products.json');
     const products = await r.json();
     const count = await fsSeedProducts(products);
-    aToast(`✓ Seeded ${count} products to Firestore`);
+    aToast(`Seeded ${count} products to Firestore`);
     await loadProducts();
   } catch (err) {
     aToast('Seed failed: ' + err.message, true);
@@ -806,7 +806,10 @@ function aToast(msg, isError = false) {
   }
   const el = document.createElement('div');
   el.style.cssText = `background:var(--ink-2);border:1px solid ${isError ? 'rgba(239,68,68,.4)' : 'var(--gold-rim)'};border-radius:var(--rs);padding:.875rem 1.25rem;font-size:.8rem;font-weight:500;box-shadow:0 8px 32px rgba(0,0,0,.5);transform:translateX(120%);opacity:0;transition:all .35s var(--spring);min-width:200px;color:${isError?'var(--red)':'var(--t1)'};`;
-  el.textContent = msg;
+  el.style.display = 'flex'; el.style.alignItems = 'center'; el.style.gap = '.6rem';
+  el.innerHTML = icon(isError ? 'alert' : 'check');
+  el.firstChild.style.color = isError ? 'var(--red)' : 'var(--green)';
+  const t = document.createElement('span'); t.textContent = msg; el.appendChild(t);
   stack.appendChild(el);
   requestAnimationFrame(() => requestAnimationFrame(() => { el.style.transform = 'translateX(0)'; el.style.opacity = '1'; }));
   setTimeout(() => { el.style.transform = 'translateX(120%)'; el.style.opacity = '0'; setTimeout(() => el.remove(), 400); }, 3500);

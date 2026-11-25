@@ -53,7 +53,7 @@ async function initFirebase() {
     window.FIREBASE_READY = true;   // `let` globals are not window props; cart.js reads window.FIREBASE_READY
 
     window.FS = { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy, onSnapshot, db };
-    console.info('[Nishtronics] Firebase connected ✓');
+    console.info('[Nishtronics] Firebase connected');
     updateFirebaseStatus();
     return true;
   } catch (err) {

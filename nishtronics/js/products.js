@@ -7,6 +7,7 @@ let activeCat = 'all', activeBrand = 'all', searchQ = '', sortMode = '';
 document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('productGrid').innerHTML = renderSkeletons(8);
   await initFirebase();
+  await window.photoIndexReady;
   let products = await fsGetProducts();
   if (!products) { const r = await fetch('data/products.json'); products = await r.json(); }
   allProducts = products;
@@ -59,7 +60,7 @@ function renderGrid(products) {
   if (!grid) return;
   if (info) info.innerHTML = `Showing <strong>${products.length}</strong> of <strong>${allProducts.length}</strong> products`;
   if (!products.length) {
-    grid.innerHTML = `<div class="no-res"><div class="ico">🔍</div><h3 style="margin-bottom:.5rem;">No products found</h3><p>Try adjusting your search or filters.</p></div>`;
+    grid.innerHTML = `<div class="no-res"><div class="ico">${icon('search')}</div><h3 style="margin-bottom:.5rem;">No products found</h3><p>Try adjusting your search or filters.</p></div>`;
     return;
   }
   grid.innerHTML = products.map(p => renderProductCard(p)).join('');

@@ -2,40 +2,96 @@
    NISHTRONICS SOUNDLABS — MAIN JS
    ═══════════════════════════════════════════ */
 
+/* ─── VINYL (decorative, spins slowly behind hero text) ─── */
+document.querySelectorAll('.hero, .page-hero').forEach(h => {
+  const v = document.createElement('div');
+  v.className = 'vinyl';
+  v.setAttribute('aria-hidden', 'true');
+  v.innerHTML = '<i class="vinyl-disc"></i>';
+  h.appendChild(v);
+});
+
 /* ─── NAV ─── */
 const nav = document.getElementById('nav') || document.querySelector('.nav');
 const menuBtn = document.getElementById('menuBtn');
 const mobileMenu = document.getElementById('mobileMenu');
+const navScrim = document.getElementById('navScrim');
 let lastScrollY = 0;
 
 window.addEventListener('scroll', () => {
   const y = window.pageYOffset;
   if (nav) {
-    nav.classList.toggle('hidden', y > lastScrollY && y > 100);
+    // keep the bar pinned for keyboard users (focus-visible), not after a mouse click leaves focus on a button
+    const keepVisible = mobileMenu?.classList.contains('open') || nav.querySelector(':focus-visible');
+    nav.classList.toggle('hidden', y > lastScrollY && y > 100 && !keepVisible);
     nav.classList.toggle('scrolled', y > 20);
   }
   lastScrollY = y;
   document.getElementById('scrollTop')?.classList.toggle('show', y > 400);
 }, { passive: true });
 
-menuBtn?.addEventListener('click', () => {
-  menuBtn.classList.toggle('open');
-  mobileMenu?.classList.toggle('open');
-  document.body.style.overflow = mobileMenu?.classList.contains('open') ? 'hidden' : '';
+// Mobile drawer: scrim click, Esc, focus trap, focus return, closes if the window grows to desktop
+function setMenu(open) {
+  if (!mobileMenu) return;
+  const wasOpen = mobileMenu.classList.contains('open');
+  mobileMenu.classList.toggle('open', open);
+  navScrim?.classList.toggle('open', open);
+  menuBtn?.setAttribute('aria-expanded', String(open));
+  document.body.style.overflow = open ? 'hidden' : '';
+  if (open) mobileMenu.querySelector('.mm-close')?.focus();
+  else if (wasOpen && mobileMenu.contains(document.activeElement)) menuBtn?.focus();
+}
+menuBtn?.addEventListener('click', () => setMenu(true));
+navScrim?.addEventListener('click', () => setMenu(false));
+mobileMenu?.querySelector('.mm-close')?.addEventListener('click', () => setMenu(false));
+mobileMenu?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+document.addEventListener('keydown', e => {
+  if (!mobileMenu?.classList.contains('open')) return;
+  if (e.key === 'Escape') { setMenu(false); return; }
+  if (e.key === 'Tab') {
+    const f = [...mobileMenu.querySelectorAll('a[href], button')].filter(el => el.offsetParent !== null);
+    if (!f.length) return;
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
 });
-mobileMenu?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-  menuBtn?.classList.remove('open');
-  mobileMenu.classList.remove('open');
-  document.body.style.overflow = '';
-}));
+window.matchMedia('(min-width:1080px)').addEventListener('change', e => { if (e.matches) setMenu(false); });
 
 document.getElementById('scrollTop')?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-// Active nav link
+// Current page (pages already ship aria-current; this keeps any page without it correct)
 const curPage = location.pathname.split('/').pop() || 'index.html';
-document.querySelectorAll('.nav-links a, .mobile-menu a').forEach(a => {
-  a.classList.toggle('active', (a.getAttribute('href') || '').split('/').pop() === curPage);
+document.querySelectorAll('.nav-links a, .mm-links a').forEach(a => {
+  if ((a.getAttribute('href') || '').split('/').pop() === curPage) a.setAttribute('aria-current', 'page');
 });
+
+// Fader: a gold cap that slides to the hovered/focused link and rests on the current page
+(function initFader() {
+  const links = document.getElementById('navLinks');
+  const fader = links?.querySelector('.nav-fader');
+  if (!fader) return;
+  const items = [...links.querySelectorAll('a')];
+  const cur = links.querySelector('a[aria-current="page"]');
+  const to = a => {
+    if (!a || !a.offsetWidth) { fader.classList.remove('on'); return; }
+    fader.style.setProperty('--fx', a.offsetLeft + 'px');
+    fader.style.setProperty('--fw', a.offsetWidth + 'px');
+    fader.classList.add('on');
+  };
+  const rest = () => to(cur);
+  items.forEach(a => {
+    a.addEventListener('mouseenter', () => to(a));
+    a.addEventListener('focus', () => to(a));
+    a.addEventListener('blur', rest);
+  });
+  links.addEventListener('mouseleave', rest);
+  window.addEventListener('resize', rest);
+  fader.style.transition = 'none';            // first paint: place it, don't slide in from the left
+  rest();
+  requestAnimationFrame(() => requestAnimationFrame(() => { fader.style.transition = ''; }));
+  document.fonts?.ready.then(rest);
+})();
 
 /* ─── CART ─── */
 const CART_KEY = 'nish_cart_v2';
@@ -59,7 +115,7 @@ function addToCart(p) {
   if (ex) ex.qty++;
   else cart.push({ id: p.id, name: p.name, brand: p.brand, price: p.price, image: productImg(p), qty: 1 });
   saveCart(cart);
-  toast(`${p.name.slice(0, 30)}… added ✓`, 'success');
+  toast(`${p.name.slice(0, 30)}… added`, 'success');
   openCart();
   document.querySelectorAll('.cart-pip').forEach(el => { el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); });
 }
@@ -103,7 +159,7 @@ function injectCartPanel() {
         <span class="ctl-lbl">Total</span>
         <span class="ctl-val" id="cartTotalDisp">KSh 0</span>
       </div>
-      <a href="cart.html" class="btn btn-gold btn-full btn-lg" onclick="closeCart()">Checkout via WhatsApp →</a>
+      <a href="cart.html" class="btn btn-gold btn-full btn-lg" onclick="closeCart()">Checkout via WhatsApp</a>
       <p class="cart-note">Pre-fills your full order on WhatsApp. We confirm and quote.</p>
     </div>
   </div>`);
@@ -123,7 +179,7 @@ function renderCartPanel() {
   if (subtitleEl) subtitleEl.textContent = n ? `${n} item${n !== 1 ? 's' : ''}` : '';
   if (!cart.length) {
     itemsEl.innerHTML = `<div class="cart-empty">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      ${icon('cart')}
       <p style="margin-top:.75rem;font-size:.88rem;">Your cart is empty</p>
       <a href="products.html" class="btn btn-outline btn-sm" style="margin-top:1rem;" onclick="closeCart()">Browse Products</a>
     </div>`;
@@ -163,11 +219,8 @@ const THEME_KEY = 'nishtronics_theme';
 function applyTheme(theme) {
   const isLight = theme === 'light';
   document.body.classList.toggle('theme-light', isLight);
-  const toggle = document.getElementById('themeToggle');
-  if (toggle) {
-    toggle.textContent = isLight ? '🌙' : '☀️';
-    toggle.setAttribute('aria-label', isLight ? 'Switch to dark theme' : 'Switch to light theme');
-  }
+  document.querySelectorAll('[data-theme-toggle]').forEach(t =>
+    t.setAttribute('aria-label', isLight ? 'Switch to dark theme' : 'Switch to light theme'));
   localStorage.setItem(THEME_KEY, theme);
 }
 
@@ -182,10 +235,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const storedTheme = localStorage.getItem(THEME_KEY) || 'dark';
   applyTheme(storedTheme);
-  document.getElementById('themeToggle')?.addEventListener('click', () => {
-    const active = document.body.classList.contains('theme-light') ? 'dark' : 'light';
-    applyTheme(active);
-  });
+  document.querySelectorAll('[data-theme-toggle]').forEach(t => t.addEventListener('click', () => {
+    applyTheme(document.body.classList.contains('theme-light') ? 'dark' : 'light');
+  }));
 });
 
 /* ─── HELPERS ─── */
@@ -198,15 +250,42 @@ const BADGE_MAP = {
   'custom': 'b-teal'
 };
 
-// Photo convention: drop images/products/<product-id>.webp and it is picked up automatically.
-// An explicit p.image (path or URL) wins. Missing files fall back to the placeholder.
-function productImg(p) { return p.image || ('images/products/' + p.id + '.webp'); }
+// An explicit p.image (path or URL) always wins.
+// Real photos (images/products/<id>.webp) are listed in images/products/index.json by tools/prepare-images.py.
+// Any product without one uses its drawn illustration (images/products/<id>.svg).
+const SITE_ROOT = document.currentScript.src.replace(/js\/main\.js(\?.*)?$/, '');
+let PHOTO_SET = new Set();
+window.photoIndexReady = fetch(SITE_ROOT + 'images/products/index.json')
+  .then(r => (r.ok ? r.json() : []))
+  .then(ids => { PHOTO_SET = new Set(ids); })
+  .catch(() => {});
+function productImg(p) {
+  if (p.image) return p.image;
+  return 'images/products/' + p.id + (PHOTO_SET.has(p.id) ? '.webp' : '.svg');
+}
+
+// VU meter for power: only where the catalog gives a real RMS figure (speakers, subs, amps).
+// Head-unit wattage is a different measure, so it is deliberately left out.
+function vuMeter(p) {
+  if (!['speakers', 'subwoofers', 'amplifiers'].includes(p.category) || !p.specs) return '';
+  let w = null;
+  for (const v of Object.values(p.specs)) {
+    const m = String(v).match(/(\d+(?:\.\d+)?)\s*W\s*RMS/i);
+    if (m) { w = parseFloat(m[1]); break; }
+  }
+  if (!w) return '';
+  const ratio = Math.min(1, Math.max(0, (Math.log(w) - Math.log(20)) / (Math.log(2000) - Math.log(20))));
+  const lit = Math.max(1, Math.round(ratio * 12));
+  const segs = Array.from({ length: 12 }, (_, i) =>
+    `<i class="${i < lit ? 'on' : ''}${i >= 10 ? ' r' : i >= 7 ? ' a' : ''}"></i>`).join('');
+  return `<div class="vu" role="img" aria-label="Power rating ${w} watts RMS"><span class="vu-label">Power</span><span class="vu-bars">${segs}</span><span class="vu-val">${w}W RMS</span></div>`;
+}
 
 function renderProductCard(p) {
   const badge = p.badge ? `<span class="badge ${BADGE_MAP[p.badge]||''}">${p.badge}</span>` : '';
   const oosBadge = !p.inStock ? `<span class="badge b-oos" style="left:auto;right:.65rem;">Out of Stock</span>` : '';
   const specs = p.specs ? Object.entries(p.specs).slice(0,3).map(([,v]) => `<span class="spec-pill">${v}</span>`).join('') : '';
-  const waMsg = encodeURIComponent(`Hi, I'm interested in the ${p.name} (${formatKsh(p.price)}) 🎵`);
+  const waMsg = encodeURIComponent(`Hi, I'm interested in the ${p.name} (${formatKsh(p.price)})`);
   const addBtn = p.inStock !== false
     ? `<button class="btn btn-gold btn-sm btn-full" onclick="addToCartById('${p.id}')">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
@@ -227,6 +306,7 @@ function renderProductCard(p) {
       <div class="pc-name">${p.name}</div>
       <p class="pc-desc">${p.description}</p>
       ${specs ? `<div class="spec-pills">${specs}</div>` : ''}
+      ${vuMeter(p)}
       <div class="pc-price">${formatKsh(p.price)}</div>
       ${addBtn}
     </div>
@@ -253,10 +333,10 @@ function getStack() {
   return s;
 }
 function toast(msg, type = 'info') {
-  const icons = { success: '✓', warning: '⚠', info: '♪' };
+  const icons = { success: icon('check'), warning: icon('alert'), info: icon('music') };
   const el = document.createElement('div');
   el.className = `toast ${type}`;
-  el.innerHTML = `<span class="toast-ico">${icons[type]||'ℹ'}</span><span class="toast-msg">${msg}</span>`;
+  el.innerHTML = `<span class="toast-ico">${icons[type]||icons.info}</span><span class="toast-msg">${msg}</span>`;
   getStack().appendChild(el);
   requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
   setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 400); }, 3000);

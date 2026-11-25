@@ -72,9 +72,9 @@ async function sendWhatsAppOrder() {
   if (!phone) { toast('Please enter your phone number', 'warning'); document.getElementById('oPhone')?.focus(); return; }
   const lines = cart.map(i => `  • ${i.name} x${i.qty} = ${formatKsh(i.price * i.qty)}`).join('\n');
   const total = formatKsh(cartTotal());
-  const locLine = del === 'Delivery' && loc ? `\n📍 Delivery to: ${loc}` : '';
-  const noteLine = notes ? `\n📝 Notes: ${notes}` : '';
-  const msg = `🛒 *NEW ORDER — Nishtronics Soundlabs*\n\n👤 *Name:* ${name}\n📞 *Phone:* ${phone}\n🚚 *Fulfilment:* ${del}${locLine}\n\n📦 *Items:*\n${lines}\n\n💰 *TOTAL: ${total}*${noteLine}\n\nPlease confirm availability and provide payment details. Thank you!`;
+  const locLine = del === 'Delivery' && loc ? `\nDelivery to: ${loc}` : '';
+  const noteLine = notes ? `\nNotes: ${notes}` : '';
+  const msg = `*NEW ORDER — Nishtronics Soundlabs*\n\n*Name:* ${name}\n*Phone:* ${phone}\n*Fulfilment:* ${del}${locLine}\n\n*Items:*\n${lines}\n\n*TOTAL: ${total}*${noteLine}\n\nPlease confirm availability and provide payment details. Thank you!`;
   window.open(`https://wa.me/254700000000?text=${encodeURIComponent(msg)}`, '_blank');
 
   // Log to Firebase if connected
