@@ -14,7 +14,7 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 os.chdir(ROOT)
 
 TOP_FILES = [f for f in os.listdir('.') if f.endswith('.html')] + [f for f in ('sitemap.xml', 'robots.txt', 'feed.xml', '_headers', '_redirects') if os.path.exists(f)]
-DIRS = ['css', 'js', 'data', 'images', 'blog', 'admin']
+DIRS = ['css', 'js', 'data', 'images', 'blog']
 
 shutil.rmtree('dist', ignore_errors=True)
 os.makedirs('dist')
